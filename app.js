@@ -40,6 +40,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', Router.AuthRouter);
 app.use('/user', Router.UserRouter);
+app.use('/posts', Router.PostsRouter);
 // app.use('/event', Router.EventRouter);
 
 // i have implemented it in signup controller like this {next(new Error('Image is required'))}
