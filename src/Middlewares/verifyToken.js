@@ -7,7 +7,7 @@ const verifyTokenSetUser = (req, res, next) => {
 		if (token) {
 			jwt.verify(token, process.env.JwtSecret, (err, user) => {
 				if (err) {
-					res.status(500).send({
+					res.status(401).send({
 						Message: 'Token Expired!',
 					});
 				}
