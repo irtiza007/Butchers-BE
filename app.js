@@ -5,11 +5,11 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import compression from 'compression';
 import passport from 'passport';
-import dbConnection from './Connection/dbConnect';
-import Router from './Routes';
+import dbConnection from './src/Connection/dbConnect';
+import Router from './src/Routes';
 
-import errorHandler from './Middlewares/errorHandler';
-import verifyToken from './Middlewares/verifyToken';
+import errorHandler from './src/Middlewares/errorHandler';
+import verifyToken from './src/Middlewares/verifyToken';
 
 dbConnection();
 
