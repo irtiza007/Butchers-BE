@@ -31,20 +31,6 @@ const getPosts = (_, res) => {
 		});
 };
 
-const getPostsById = (req, res) => {
-	const { _id } = req.user;
-
-	Model.postSchema
-		.find({ postBy: _id })
-		.populate('postBy', 'firstname')
-		.then(posts => {
-			res.status(200).send({ posts });
-		})
-		.catch(err => {
-			res.status(500).send({ Message: 'Internal Server Error', err });
-		});
-};
-
 const addComment = (req, res) => {
 	const { postId } = req.params;
 	const { message } = req.body;
@@ -89,6 +75,7 @@ const addCommentReply = (req, res) => {
 								savedReply: cmnt.replies[cmnt.replies.length - 1],
 								Message: 'Replied Successfully',
 								type: httpStatus.Ok,
+								doc,
 							});
 						}
 					})
@@ -101,6 +88,49 @@ const addCommentReply = (req, res) => {
 			}
 		},
 	);
+};
+
+const deletePost = (req, res) => {
+	const { id } = req.params;
+	console.log(id);
+	Model.CommentModel.remove({ postId: { $in: id } })
+		.then(comments => {
+			Model.PostModel.findByIdAndRemove(id, (err, post) => {
+				if (post) {
+					res.status(httpStatus.OK).send({
+						Message: 'Post Deleted Successfully.',
+						post,
+						comments,
+					});
+				} else {
+					res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+						Message: 'Unable to Delete.',
+						err,
+					});
+				}
+			});
+		})
+		.catch(err => {
+			res
+				.status(httpStatus.INTERNAL_SERVER_ERROR)
+				.send({ error: err, message: 'Internal server error' });
+		});
+};
+const deleteComment = (req, res) => {
+	const { id } = req.params;
+	Model.CommentModel.findByIdAndRemove(id)
+		.then(result => {
+			res.status(httpStatus.OK).send({
+				Message: 'Comment Deleted Successfully.',
+				comment: result,
+			});
+		})
+		.catch(err => {
+			res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+				Message: 'Unable to Delete.',
+				err,
+			});
+		});
 };
 
 const deleteCommentReply = (req, res) => {
@@ -163,9 +193,10 @@ const getSinglePost = (req, res) => {
 export default {
 	createPost,
 	getPosts,
-	getPostsById,
 	addComment,
 	getSinglePost,
 	addCommentReply,
 	deleteCommentReply,
+	deletePost,
+	deleteComment,
 };

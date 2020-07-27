@@ -41,5 +41,10 @@ postsRouter.delete(
 	isLoggedInUser.isLoggedIn,
 	posts.deleteCommentReply,
 );
+postsRouter.delete(
+	'/deletepost/:id',
+	isLoggedInUser.isLoggedIn,
+	posts.deletePost,
+);
 
 export default postsRouter;
