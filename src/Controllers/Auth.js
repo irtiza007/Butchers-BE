@@ -11,7 +11,6 @@ const createToken = (user, res, next, result) => {
 		name,
 		imageUrl,
 	};
-	console.log(payload);
 	// create a token
 	jwt.sign(
 		payload,
@@ -53,7 +52,7 @@ const userSignIn = (req, res, next) => {
 		} else {
 			// Wrong Password.
 			res.status(400);
-			next(new Error('No User Exist With This Email'));
+			next(new Error('Email or Password are incorrect'));
 		}
 	});
 };
