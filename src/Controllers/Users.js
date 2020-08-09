@@ -2,6 +2,7 @@ import bcryptjs from 'bcryptjs';
 import status from 'http-status';
 import Model from '../Models/Model';
 import helper from '../Helpers';
+import httpStatus from 'http-status';
 
 const userSignUp = (req, res, next) => {
 	const { name, password, email } = req.body;
@@ -76,7 +77,24 @@ const editUser = (req, res) => {
 	} else updateUser(req, res);
 };
 
+const getAllUser = (req, res) => {
+	Model.UserModel.find({}, 'imageUrl name email _id')
+		.then(result => {
+			res.status(httpStatus.OK).send({
+				message: 'users loaded successfully',
+				users: result,
+			});
+		})
+		.catch(err => {
+			res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+				message: 'Internal server Error',
+				err,
+			});
+		});
+};
+
 export default {
 	userSignUp,
 	editUser,
+	getAllUser,
 };

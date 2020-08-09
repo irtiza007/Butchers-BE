@@ -34,5 +34,6 @@ userRouter.put(
 	isLoggedInUser.isLoggedIn,
 	users.editUser,
 );
+userRouter.get('/', isLoggedInUser.isLoggedIn, users.getAllUser);
 
 export default userRouter;
